@@ -1,0 +1,18 @@
+services:
+  sqlserver-db:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.sqlserver
+    container_name: alm-sqlserver
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "AlmPrueba123!"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+
+volumes:
+  sqlserver_data:
