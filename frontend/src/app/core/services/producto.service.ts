@@ -7,7 +7,15 @@ export class ProductoService {
   private api = inject(ApiService);
 
   buscar(clave: string, tipoId: number) {
-    return this.api.get<Producto[]>('/productos', { clave: clave, tipoId: tipoId.toString() });
+    const params: Record<string, string> = {};
+
+    if (clave.trim() !== '')  //Si no hay clave
+      params['clave'] = clave;
+
+    if (tipoId > 0)            //Si no hay tipo
+      params['tipoId'] = tipoId.toString();
+
+    return this.api.get<Producto[]>('/productos', params);
   }
 
   cargar() {

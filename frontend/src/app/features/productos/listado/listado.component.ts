@@ -19,13 +19,13 @@ export class ListadoComponent implements OnInit {
   private psvc        = inject(ProductoService);
   private tpsvc       = inject(TipoProductoService);
 
-  productos    = signal<Producto[]>([]);
-  tipos        = signal<TipoProducto[]>([]);
-  mostrarForm  = signal(false);
+  productos      = signal<Producto[]>([]);
+  tipos          = signal<TipoProducto[]>([]);
+  mostrarForm    = signal(false);
   productoEditar = signal<Producto | null>(null);
-  error        = signal('');
-  filtroClave  = '';
-  filtroTipoId = 0;
+  error          = signal('');
+  filtroClave  = signal<string>('');
+  filtroTipoId = signal<number>(0);
 
   ngOnInit(): void {  
     this.cargar();
@@ -39,7 +39,7 @@ export class ListadoComponent implements OnInit {
     if (!this.filtroClave && !this.filtroTipoId) {
       this.cargar();
     } else {
-      this.psvc.buscar(this.filtroClave, this.filtroTipoId).subscribe({
+      this.psvc.buscar(this.filtroClave(), this.filtroTipoId()).subscribe({
         next: (data) => this.productos.set(data),
         error: ()     => this.error.set('Error al cargar productos')
       });
