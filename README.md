@@ -11,7 +11,7 @@ Si aparece un aviso de que requiere virtualización, se necesita activar
 desde el BIOS/UEFI, o instalar WSL con el comando: wsl --install desde PowerShell y reiniciar.
 
 ## Ejecutar
-git clone https://github.com/JaimELegor/almaximoti-prueba/tree/main
+git clone https://github.com/JaimELegor/almaximoti-prueba.git
  (Si no se tiene Git, descargar directamente el .zip)
 cd alm-prueba
 docker-compose up --build
