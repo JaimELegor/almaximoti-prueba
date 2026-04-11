@@ -1,0 +1,61 @@
+@if (error()) {
+  <div class="alert alert-danger">{{ error() }}</div>
+}
+
+<!-- Form -->
+<form (ngSubmit)="guardar()" class="mb-4">
+  <div class="d-flex gap-2 align-items-end">
+
+    <div>
+      <label class="form-label">Nombre</label>
+      <input class="form-control" [(ngModel)]="nombre"
+             name="nombre" placeholder="Ej. Coca-Cola" />
+    </div>
+
+    <div>
+      <label class="form-label">Descripción</label>
+      <input class="form-control" [(ngModel)]="descripcion"
+             name="descripcion" placeholder="Opcional" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+      {{ esEdicion ? 'Guardar cambios' : 'Agregar' }}
+    </button>
+
+    @if (esEdicion) {
+      <button type="button" class="btn btn-secondary" (click)="limpiar()">
+        Cancelar
+      </button>
+    }
+
+  </div>
+</form>
+
+<!-- Tabla -->
+<div class="table-responsive">
+  <table class="table table-striped table-hover table-bordered align-middle">
+    <thead class="table-dark">
+      <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th class="text-center">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (p of proveedores(); track p.id) {
+        <tr>
+          <td>{{ p.nombre }}</td>
+          <td>{{ p.descripcion }}</td>
+          <td class="text-center">
+            <div class="d-flex gap-2 justify-content-center">
+              <button type="button" class="btn btn-sm btn-outline-secondary"
+                      (click)="editar(p)">Editar</button>
+              <button type="button" class="btn btn-sm btn-outline-danger"
+                      (click)="eliminar(p.id)">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

@@ -28,7 +28,7 @@ public class ProductoController {
             (String) body.get("clave"),
             (String) body.get("nombre"),
             Double.valueOf(body.get("precio").toString()),
-            Long.valueOf(body.get("tipoProductoId").toString())
+            Long.valueOf(body.get("tipoId").toString())
         );
     }
 
@@ -38,7 +38,7 @@ public class ProductoController {
             clave,    //PARA CONVENCION REST, IDENTIFICO EL PRODUCTO DESDE EL URL
             (String) body.get("nombre"),
             Double.valueOf(body.get("precio").toString()),
-            Long.valueOf(body.get("tipoProductoId").toString())
+            Long.valueOf(body.get("tipoId").toString())
         );
     }
 

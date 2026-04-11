@@ -22,10 +22,10 @@ public class ProductoProveedorController {
     @PostMapping
     public void crearProductoProveedor(@RequestBody Map<String, Object> body) {
         service.crearProductoProveedor(
-            (String) body.get("claveProducto"),
-            (String) body.get("claveProveedor"),
+            (String) body.get("clave_producto"),
+            (String) body.get("clave_proveedor"),
             Double.valueOf(body.get("costo").toString()),
-            Long.valueOf(body.get("proveedorId").toString())
+            Long.valueOf(body.get("proveedor_id").toString())
         );
     }
 

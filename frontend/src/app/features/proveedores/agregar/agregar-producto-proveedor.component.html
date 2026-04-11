@@ -1,0 +1,60 @@
+@if (error()) {
+  <div class="alert alert-danger">{{ error() }}</div>
+}
+
+<form (ngSubmit)="guardar()">
+
+  <div class="mb-3">
+    <label class="form-label">Proveedor</label>
+    <select class="form-select" [(ngModel)]="proveedorId" name="proveedorId"
+            [disabled]="esEdicion">
+      <option [value]="0" disabled>Selecciona un proveedor</option>
+      @for (pv of proveedores(); track pv.id) {
+        <option [value]="pv.id">{{ pv.nombre }}</option>
+      }
+    </select>
+  </div>
+
+  <button type="button" class="btn btn-outline-primary text-nowrap"
+              (click)="mostrarFormProveedor.set(true)">
+        + Nuevo
+  </button>
+
+  <div class="mb-3">
+    <label class="form-label">Clave proveedor</label>
+    <input
+      class="form-control"
+      [(ngModel)]="claveProveedor"
+      name="claveProveedor"
+      [readonly]="esEdicion"
+    />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Costo</label>
+    <div class="input-group">
+      <span class="input-group-text">$</span>
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="costo"
+        name="costo"
+        min="0"
+        step="0.01"
+      />
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end mt-4">
+    <button type="submit" class="btn btn-primary">
+      {{ esEdicion ? 'Guardar cambios' : 'Agregar proveedor' }}
+    </button>
+  </div>
+
+</form>
+
+@if (mostrarFormProveedor()) {
+  <app-modal titulo="Nuevo proveedor" (cerrar)="mostrarFormProveedor.set(false)">
+    <app-proveedores (guardado)="onProveedorGuardado()" />
+  </app-modal>
+}

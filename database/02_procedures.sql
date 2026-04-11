@@ -18,6 +18,8 @@ BEGIN
         p.nombre,
         p.precio,
         p.tipo_producto_id,
+        tp.nombre AS tipo_nombre,
+        pp.costo,
         pp.clave_proveedor
     FROM producto p
     INNER JOIN tipo_producto tp      ON tp.id = p.tipo_producto_id
@@ -180,5 +182,103 @@ BEGIN
     INNER JOIN proveedor pv ON pv.id = pp.proveedor_id
     WHERE p.clave = @clave
     ORDER BY pv.nombre ASC;
+END;
+GO
+
+IF OBJECT_ID('sp_get_proveedores', 'P') IS NOT NULL
+    DROP PROCEDURE sp_get_proveedores;
+GO 
+
+CREATE PROCEDURE sp_get_proveedores
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        id,
+        nombre,
+        descripcion
+    FROM proveedor
+    ORDER BY nombre ASC;
+END;
+GO
+
+IF OBJECT_ID('sp_crear_proveedores', 'P') IS NOT NULL
+    DROP PROCEDURE sp_crear_proveedores;
+GO 
+
+CREATE PROCEDURE sp_crear_proveedor
+    @nombre      NVARCHAR(150),
+    @descripcion NVARCHAR(255) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF EXISTS (SELECT 1 FROM proveedor WHERE nombre = @nombre)
+    BEGIN
+        RAISERROR('Ya existe un proveedor con ese nombre.', 16, 1);
+        RETURN;
+    END
+
+    INSERT INTO proveedor (nombre, descripcion)
+    VALUES (@nombre, @descripcion);
+END;
+GO
+
+IF OBJECT_ID('sp_editar_proveedores', 'P') IS NOT NULL
+    DROP PROCEDURE sp_editar_proveedores;
+GO 
+
+CREATE PROCEDURE sp_editar_proveedor
+    @id          BIGINT,
+    @nombre      NVARCHAR(150),
+    @descripcion NVARCHAR(255) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF NOT EXISTS (SELECT 1 FROM proveedor WHERE id = @id)
+    BEGIN
+        RAISERROR('Proveedor no encontrado.', 16, 1);
+        RETURN;
+    END
+
+    IF EXISTS (SELECT 1 FROM proveedor WHERE nombre = @nombre AND id != @id)
+    BEGIN
+        RAISERROR('Ya existe otro proveedor con ese nombre.', 16, 1);
+        RETURN;
+    END
+
+    UPDATE proveedor
+    SET nombre      = @nombre,
+        descripcion = @descripcion
+    WHERE id = @id;
+END;
+GO
+
+IF OBJECT_ID('sp_eliminar_proveedores', 'P') IS NOT NULL
+    DROP PROCEDURE sp_eliminar_proveedores;
+GO 
+
+CREATE PROCEDURE sp_eliminar_proveedor
+    @id BIGINT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF NOT EXISTS (SELECT 1 FROM proveedor WHERE id = @id)
+    BEGIN
+        RAISERROR('Proveedor no encontrado.', 16, 1);
+        RETURN;
+    END
+
+    -- Evita eliminar si tiene productos asociados
+    IF EXISTS (SELECT 1 FROM producto_proveedor WHERE proveedor_id = @id)
+    BEGIN
+        RAISERROR('No se puede eliminar: el proveedor tiene productos asociados.', 16, 1);
+        RETURN;
+    END
+
+    DELETE FROM proveedor WHERE id = @id;
 END;
 GO

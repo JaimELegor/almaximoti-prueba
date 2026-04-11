@@ -1,0 +1,114 @@
+@if (error()) {
+  <div class="alert alert-danger">{{ error() }}</div>
+}
+
+<form (ngSubmit)="guardar()">
+  <div class="d-flex flex-row gap-1">
+
+    <div class="d-flex flex-column">
+      <div class="mb-3">
+        <label class="form-label">Clave</label>
+        <input
+          class="form-control"
+          [(ngModel)]="clave"
+          name="clave"
+          placeholder="Ej. PROD-001"
+          [disabled]="esEdicion"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input
+          class="form-control"
+          [(ngModel)]="nombre"
+          name="nombre"
+          placeholder="Ej. Coca-Cola"
+        />
+      </div>
+    </div>
+
+    <div class="d-flex flex-column">
+      <div class="mb-3">
+        <label class="form-label">Precio</label>
+        <div class="input-group">
+          <span class="input-group-text">$</span>
+          <input
+            type="number"
+            class="form-control"
+            [(ngModel)]="precio"
+            name="precio"
+            placeholder="0.00"
+            min="0"
+            step="0.01"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Tipo de producto</label>
+      <select class="form-select" [(ngModel)]="tipoId" name="tipoId">
+        <option [value]="0" disabled>Selecciona un tipo</option>
+        @for (tipo of tipos(); track tipo.id) {
+          <option [value]="tipo.id">{{ tipo.nombre }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <!--------TABLA DE PROVEEDORES--------->
+  <div class="table-responsive">
+    <table class="table table-striped table-hover table-bordered align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Nombre</th>
+          <th>Clave</th>
+          <th>Costo</th>
+          <th class="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (pp of productosP(); track pp.id) {
+          <tr>
+            <td>{{ pp.proveedor_nombre }}</td>
+            <td>{{ pp.clave_proveedor }}</td>
+            <td>{{ pp.costo | currency:'MXN' }}</td>
+            <td class="text-center">
+              <div class="d-flex gap-2 justify-content-center">
+                <button type="button" class="btn btn-sm btn-outline-secondary" (click)="editar(pp)">Editar</button>
+                <button type="button" class="btn btn-sm btn-outline-danger" (click)="eliminar(pp.clave_proveedor)">Eliminar</button>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex justify-content-end mt-3">
+    <button type="button" class="btn btn-primary" (click)="mostrarForm.set(true)">
+      + Nuevo proveedor
+    </button>
+  </div>
+
+  <div class="d-flex justify-content-end gap-2 mt-4">
+    <button type="submit" class="btn btn-success">
+      {{ esEdicion ? 'Guardar cambios' : 'Crear producto' }}
+    </button>
+  </div>
+
+  @if (mostrarForm()) {
+    <app-modal
+      [titulo]="proveedorEditar() ? 'Editar Proveedor' : 'Nuevo Proveedor'"
+      (cerrar)="cerrarModal()"
+    >
+      <app-agregar-producto-proveedor
+        [claveProducto]="clave"
+        [proveedorEditar]="proveedorEditar()"
+        (guardado)="onGuardado()"
+      />
+    </app-modal>
+  }
+
+</form>
