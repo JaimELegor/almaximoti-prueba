@@ -12,4 +12,4 @@ docker-compose up --build
 - Base de datos: localhost:1433 (usuario: sa / AlmPrueba123!)
 
 # Diagrama UML:
-![Diagrama UML](docs/uml.png)
+![Diagrama UML](uml.png)
