@@ -24,6 +24,13 @@ docker-compose up --build
 # Diagrama UML:
 ![Diagrama UML](UML.png)
 
+# Archivo de ejecución BD:
+- Se compone de los archivos:
+    - docker/init-db.sql
+    - database/01_schema.sql
+    - database/02_procedures.sql
+    - database/03_seed.sql
+
 # Manual de usuario:
 
 ## Listado:
@@ -41,3 +48,4 @@ docker-compose up --build
 
 ## Nuevo producto:
 ![NuevoProducto](nuevo_producto.png)
+
