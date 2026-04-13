@@ -112,4 +112,12 @@ export class AgregarProductoComponent implements OnInit {
     this.cerrarModal();
     this.getByProducto(); 
   }
+
+  agregarProveedor(): void {
+    if (!this.esEdicion) {
+      this.guardar();
+    }
+    this.mostrarForm.set(true);
+
+  }
 }
